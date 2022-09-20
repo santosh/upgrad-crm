@@ -1,11 +1,11 @@
 const express = require("express")
-const serverConfig = require("./configs/server.config")
-const app = express()
 const mongoose = require("mongoose")
+const bcrypt = require("bcryptjs")
+
+const serverConfig = require("./configs/server.config")
 const dbConfig = require("./configs/db.config")
 const User = require("./models/user.model")
 const constants = require("./utils/constants")
-const bcrypt = require("bcryptjs")
 
 mongoose.connect(dbConfig.DB_URL)
 
@@ -19,6 +19,10 @@ db.once("open", () => {
   console.log("Connected to the MongoDB");
   init()
 })
+
+const app = express()
+require("./routes/auth.route")(app)
+app.use(express.json())
 
 app.listen(serverConfig.PORT, () => {
   console.log("Server started on the port no:", serverConfig.PORT);
