@@ -1,0 +1,31 @@
+{
+  "name": "upgrad-crm",
+  "version": "0.1.0",
+  "description": "CRM application showcasing backend application using express.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santosh/eshop-service.git"
+  },
+  "keywords": [
+    "express",
+    "node",
+    "ecommerce",
+    "mongodb"
+  ],
+  "author": "Santosh Kumar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/santosh/eshop-service/issues"
+  },
+  "homepage": "https://github.com/santosh/eshop-service#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.6.1"
+  }
+}
