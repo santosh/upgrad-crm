@@ -3,4 +3,5 @@ const signupValidator = require("../middlewares/verifyUserRequestBody")
 
 module.exports = (app) => {
   app.post("/crm/api/v1/auth/signup", [signupValidator.validateSignupRequestBody], authController.signup)
+  app.post("/crm/api/v1/auth/signin", authController.signin)
 }

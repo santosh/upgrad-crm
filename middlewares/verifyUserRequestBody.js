@@ -34,6 +34,8 @@ validateSignupRequestBody = (req, res, next) => {
       message: "password not provided"
     })
   }
+
+  next();
 }
 
 module.exports = {
