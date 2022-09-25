@@ -22,6 +22,7 @@ db.once("open", () => {
 
 const app = express()
 require("./routes/auth.route")(app)
+require("./routes/user.route")(app)
 app.use(express.json())
 
 app.listen(serverConfig.PORT, () => {
