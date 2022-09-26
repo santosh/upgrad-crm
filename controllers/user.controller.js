@@ -10,3 +10,17 @@ exports.findAllUsers = async (req, res) => {
   // return all the users
   return res.status(200).json(users)
 }
+
+exports.update = async (req, res) => {
+  const userIdReq = req.params.userId
+  const user = await User.findOne({ userId: userIdReq })
+
+  user.userStatus = req.body.userStatus != undefined ? req.body.userStatus : user.userStatus
+  user.userType = req.body.userType != undefined ? req.body.userType : user.userType
+
+  await user.save()
+
+  res.status(200).send({
+    message: "User got successfullly saved"
+  })
+}
