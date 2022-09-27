@@ -20,16 +20,6 @@ db.once("open", () => {
   init()
 })
 
-const app = express()
-require("./routes/auth.route")(app)
-require("./routes/user.route")(app)
-require("./routes/ticket.route")(app)
-app.use(express.json())
-
-app.listen(serverConfig.PORT, () => {
-  console.log("Server started on the port no:", serverConfig.PORT);
-})
-
 
 async function init() {
   // check if the admin user is already existing
@@ -59,3 +49,14 @@ async function init() {
     console.log("Error while storing the user", err.message);
   }
 }
+
+const app = express()
+app.use(express.json())
+
+require("./routes/auth.route")(app)
+require("./routes/user.route")(app)
+require("./routes/ticket.route")(app)
+
+app.listen(serverConfig.PORT, () => {
+  console.log("Server started on the port no:", serverConfig.PORT);
+})

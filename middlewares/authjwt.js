@@ -4,7 +4,7 @@ const secretConfig = require("../configs/secret.config")
 const User = require("../models/user.model")
 const constants = require("../utils/constants")
 
-module.exports = verifyToken = (req, res, next) => {
+verifyToken = (req, res, next) => {
   // read the token passed in the request header
   const token = req.headers["x-access-token"]
 
@@ -27,7 +27,7 @@ module.exports = verifyToken = (req, res, next) => {
   })
 }
 
-module.exports = isAdmin = async (req, res, next) => {
+isAdmin = async (req, res, next) => {
   const user = await User.findOne({ userId: req.userId })
 
   if (user && user.userType == constants.userTypes.admin) {
@@ -37,4 +37,9 @@ module.exports = isAdmin = async (req, res, next) => {
       message: "Only ADMIN is allowed to make this call"
     })
   }
+}
+
+module.exports = {
+  verifyToken,
+  isAdmin
 }

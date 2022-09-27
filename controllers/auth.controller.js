@@ -2,7 +2,7 @@ const constants = require("../utils/constants")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const User = require("../models/user.model")
-const authSecret = require("../config/auth.config")
+const authSecret = require("../configs/secret.config")
 
 // write the logic to register a user
 
