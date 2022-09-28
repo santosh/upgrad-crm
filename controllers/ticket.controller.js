@@ -65,5 +65,26 @@ exports.updateTicket = async (req, res) => {
 // 2. Engineer: Return all tickets assigned to them. 
 // 3. User: Get all tickets created by them.
 exports.getAllTicket = async (req, res) => {
+  try {
+    let queryObj = {}
+    if (req.userType == constants.userTypes.engineer) {
+      queryObj = { $or: [{ reporter: req.userId }, { assignee: req.userId }] }
+    } else {
+      queryObj = { userId: req.userId }
+    }
+    const tickets = await Ticket.find(queryObj)
 
+    return res.status(200).send(tickets);
+  } catch (err) {
+    console.log("Error while fetching tickets", err.message);
+  }
+}
+
+exports.getOneTicket = async (req, res) => {
+  try {
+    const ticket = await Ticket.find({ _id: req.params.id })
+    return res.status(200).send(ticket);
+  } catch (err) {
+    console.log("Error while fetching tickets", err.message);
+  }
 }
