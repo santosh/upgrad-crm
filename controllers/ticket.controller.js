@@ -1,4 +1,4 @@
-const User = require("../models/user.model")
+const Ticket = require("../models/ticket.model")
 
 exports.create = async (req, res) => {
   // read the ticket input
@@ -13,7 +13,7 @@ exports.create = async (req, res) => {
 
   // store ticket data to DB
   try {
-    const ticketCreated = await User.create(userObj)
+    const ticketCreated = await Ticket.create(ticketObj)
 
     // return response
     const ticketResp = {
