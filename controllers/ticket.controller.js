@@ -34,3 +34,36 @@ exports.create = async (req, res) => {
     })
   }
 }
+
+// updateTicket should only can be edited by:
+// 1. User who created the ticket
+// 2. Engineer who is assigned
+// 3. Admin
+exports.updateTicket = async (req, res) => {
+  // ticket id passed in the path param should have been validated in the MW
+  // fetch the ticket
+  const ticket = await Ticket.findOne({ _id: req.params.id })
+
+  // update the ticket
+  ticket.title = req.body.title != undefined ? req.body.title : ticket.title
+  ticket.ticketPriority = req.body.ticketPriority != undefined ? req.body.ticketPriority : ticket.ticketPriority
+  ticket.description = req.body.description != undefined ? req.body.description : ticket.description
+  ticket.status = req.body.status != undefined ? req.body.status : ticket.status
+  ticket.reporter = req.body.reporter != undefined ? req.body.reporter : ticket.reporter
+  ticket.assignee = req.body.assignee != undefined ? req.body.assignee : ticket.assignee
+
+  // save the fetched ticket in the database
+  const updatedTicket = await ticket.update()
+
+  // return the response
+  res.status(200).send(updatedTicket)
+}
+
+// getAllTicket returns a list of all tickets
+// For:
+// 1. Admin: Return all tickets
+// 2. Engineer: Return all tickets assigned to them. 
+// 3. User: Get all tickets created by them.
+exports.getAllTicket = async (req, res) => {
+
+}
