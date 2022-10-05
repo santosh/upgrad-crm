@@ -10,10 +10,10 @@ exports.signup = async (req, res) => {
   // read the user input
   const userObj = {
     name: req.body.name,
-    userId: req.body.userId,
+    userID: req.body.userID,
     email: req.body.email,
-    userType: req.body.userType,
-    userStatus: (req.body.userType == constants.userTypes.engineer)
+    userType: req.body.userType === undefined ? constants.userTypes.customer : req.body.userType,
+    userStatus: (req.body.userType === constants.userTypes.engineer)
       ? constants.userStatuses.pending : req.body.userStatus,
     password: bcrypt.hashSync(req.body.password, 8)
   }
@@ -25,7 +25,7 @@ exports.signup = async (req, res) => {
     // return response
     const userResp = {
       name: userCreated.name,
-      userId: userCreated.userId,
+      userID: userCreated.userID,
       email: userCreated.email,
       userType: userCreated.userType,
       userStatus: userCreated.userStatus,
@@ -37,7 +37,7 @@ exports.signup = async (req, res) => {
   } catch (error) {
     console.log("Error while creating a new user", error.message);
     res.status(500).json({
-      message: "Some internal server error has happened when inserting user"
+      message: "Internal Server Error while inserting user"
     })
   }
 
@@ -48,7 +48,7 @@ exports.login = async (req, res) => {
   const user = await User.findOne({ userID: req.body.userID })
 
   if (!user) {
-    return res.status(400).json({ message: "user id passed is incorrect" })
+    return res.status(400).json({ message: "userID id passed is incorrect" })
   }
 
   // check if user is not in pending state
@@ -61,7 +61,7 @@ exports.login = async (req, res) => {
 
   if (!isPasswordValid) {
     return res.status(400).send({
-      "message": "Password provided is incorrect"
+      "message": "userID or password provided is incorrect"
     })
   }
 

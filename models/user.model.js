@@ -33,12 +33,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: constants.userStatuses.approved,
     enum: [constants.userStatuses.approved, constants.userStatuses.pending, constants.userStatuses.rejected]
-  },
-  // createdAt: {
-  //   type: Date,
-  //   default: () => Date.now(),
-  //   immutable: true
-  // }
+  }
 }, { timestamps: true, versionKey: false })
 
 module.exports = mongoose.model("User", userSchema)

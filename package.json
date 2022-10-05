@@ -4,7 +4,8 @@
   "description": "CRM application showcasing backend application using express.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec node app.js --signal SIGTERM"
   },
   "repository": {
     "type": "git",
