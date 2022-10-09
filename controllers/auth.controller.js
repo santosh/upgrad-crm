@@ -4,8 +4,7 @@ const jwt = require("jsonwebtoken")
 const User = require("../models/user.model")
 const authSecret = require("../configs/secret.config")
 
-// write the logic to register a user
-
+// Logic to register a user
 exports.signup = async (req, res) => {
   // read the user input
   const userObj = {
@@ -43,6 +42,7 @@ exports.signup = async (req, res) => {
 
 }
 
+// Logic to login a user
 exports.login = async (req, res) => {
   // load the user 
   const user = await User.findOne({ userID: req.body.userID })

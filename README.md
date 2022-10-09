@@ -85,3 +85,8 @@ assigned to them
 - API for the authenticated ADMIN to get the list of all the issues
 - API for the authenticated ADMIN to get the list of all the issues after applying certain
 filters
+
+## Bonus Feature: Make Things TypeScript
+
+- Rewrite the application in TypeScript
+- Apply best practices
