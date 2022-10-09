@@ -11,6 +11,17 @@ exports.findAllUsers = async (req, res) => {
   return res.status(200).json(users)
 }
 
+exports.findUserById = async (req, res) => {
+  // fetch the data from the DB
+  const users = await User.find({ _id: req.params.userId }).lean()
+
+  // remove the private data in these documents
+  users.map(user => delete user.password)
+
+  // return all the users
+  return res.status(200).json(users)
+}
+
 exports.update = async (req, res) => {
   const userIdReq = req.params.userId
   const user = await User.findOne({ userId: userIdReq })
