@@ -27,7 +27,7 @@ exports.findAllUsers = async (req, res) => {
 exports.findUserById = async (req, res) => {
   try {
     // fetch the data from the DB
-    const users = await User.find({ _id: req.params.userId }).lean()
+    const users = await User.find({ userID: req.params.userId }).lean()
 
     // remove the private data in these documents
     users.map(user => delete user.password)
@@ -46,7 +46,7 @@ exports.findUserById = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const userIdReq = req.params.userId
-    const user = await User.findOne({ userId: userIdReq })
+    const user = await User.findOne({ userID: userIdReq })
 
     user.userStatus = req.body.userStatus != undefined ? req.body.userStatus : user.userStatus
     user.userType = req.body.userType != undefined ? req.body.userType : user.userType
