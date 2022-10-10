@@ -28,7 +28,7 @@ verifyToken = (req, res, next) => {
 }
 
 isAdmin = async (req, res, next) => {
-  const user = await User.findOne({ userId: req.userId })
+  const user = await User.findOne({ userID: req.userId })
 
   if (user && user.userType == constants.userTypes.admin) {
     next()
