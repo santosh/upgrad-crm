@@ -1,14 +1,24 @@
 const Ticket = require("../models/ticket.model")
+const User = require("../models/user.model")
+const constants = require("../utils/constants")
 
+// TODO: Assign engineer with least assigned ticket
 exports.create = async (req, res) => {
   // read the ticket input
   const ticketObj = {
     title: req.body.title,
-    ticketPriority: req.body.ticketPriority,
     description: req.body.description,
     status: req.body.status,
     reporter: req.userId,
-    assignee: null
+  }
+
+  const engineer = await User.findOne({
+    userType: constants.userTypes.engineer,
+    userStatus: constants.userStatuses.approved
+  })
+
+  if (engineer) {
+    ticketObj.assignee = engineer.userID
   }
 
   // store ticket data to DB
@@ -23,6 +33,7 @@ exports.create = async (req, res) => {
       status: ticketCreated.status,
       reporter: ticketCreated.reporter,
       assignee: ticketCreated.assignee,
+      createdAt: ticketCreated.createdAt,
       updatedAt: ticketCreated.updatedAt
     }
     res.status(201).json(ticketResp)
