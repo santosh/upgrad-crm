@@ -38,36 +38,43 @@ exports.create = async (req, res) => {
     }
     res.status(201).json(ticketResp)
 
-  } catch (error) {
-    console.log("Error while creating a new ticket", error.message);
+  } catch (err) {
+    console.log("Error while creating a new ticket", err.message);
     res.status(500).json({
-      message: "Some internal server error has happened when inserting ticket"
+      message: "Some internal server error has happened when creating ticket"
     })
   }
 }
 
-// updateTicket should only can be edited by:
+// updateTicketById should only can be edited by:
 // 1. User who created the ticket
 // 2. Engineer who is assigned
 // 3. Admin
-exports.updateTicket = async (req, res) => {
-  // ticket id passed in the path param should have been validated in the MW
-  // fetch the ticket
-  const ticket = await Ticket.findOne({ _id: req.params.id })
+exports.updateTicketById = async (req, res) => {
+  try {
+    // ticket id passed in the path param should have been validated in the MW
+    // fetch the ticket
+    const ticket = await Ticket.findOne({ _id: req.params.id })
 
-  // update the ticket
-  ticket.title = req.body.title != undefined ? req.body.title : ticket.title
-  ticket.ticketPriority = req.body.ticketPriority != undefined ? req.body.ticketPriority : ticket.ticketPriority
-  ticket.description = req.body.description != undefined ? req.body.description : ticket.description
-  ticket.status = req.body.status != undefined ? req.body.status : ticket.status
-  ticket.reporter = req.body.reporter != undefined ? req.body.reporter : ticket.reporter
-  ticket.assignee = req.body.assignee != undefined ? req.body.assignee : ticket.assignee
+    // update the ticket
+    ticket.title = req.body.title != undefined ? req.body.title : ticket.title
+    ticket.ticketPriority = req.body.ticketPriority != undefined ? req.body.ticketPriority : ticket.ticketPriority
+    ticket.description = req.body.description != undefined ? req.body.description : ticket.description
+    ticket.status = req.body.status != undefined ? req.body.status : ticket.status
+    ticket.reporter = req.body.reporter != undefined ? req.body.reporter : ticket.reporter
+    ticket.assignee = req.body.assignee != undefined ? req.body.assignee : ticket.assignee
 
-  // save the fetched ticket in the database
-  const updatedTicket = await ticket.update()
+    // save the fetched ticket in the database
+    const updatedTicket = await ticket.update()
 
-  // return the response
-  res.status(200).send(updatedTicket)
+    // return the response
+    res.status(200).send(updatedTicket)
+  } catch (err) {
+    console.log(`Error while updating ticket with id ${req.params.id}`, err.message);
+    res.status(500).json({
+      message: "Some internal server error has happened when updating ticket"
+    })
+  }
 }
 
 // getAllTicket returns a list of all tickets
@@ -75,6 +82,7 @@ exports.updateTicket = async (req, res) => {
 // 1. Admin: Return all tickets
 // 2. Engineer: Return all tickets assigned to them. 
 // 3. User: Get all tickets created by them.
+// TODO: Need to encode userType in jwt itself to prevent read from db.
 exports.getAllTicket = async (req, res) => {
   try {
     let queryObj = {}
@@ -88,14 +96,20 @@ exports.getAllTicket = async (req, res) => {
     return res.status(200).send(tickets);
   } catch (err) {
     console.log("Error while fetching tickets", err.message);
+    res.status(500).json({
+      message: "Some internal server error has happened when fetching tickets"
+    })
   }
 }
 
-exports.getOneTicket = async (req, res) => {
+exports.getTicketById = async (req, res) => {
   try {
     const ticket = await Ticket.find({ _id: req.params.id })
     return res.status(200).send(ticket);
   } catch (err) {
-    console.log("Error while fetching tickets", err.message);
+    console.log("Error while fetching ticket", err.message);
+    res.status(500).json({
+      message: "Some internal server error has happened when fetching ticket"
+    })
   }
 }
