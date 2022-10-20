@@ -20,10 +20,10 @@ verifyToken = (req, res, next) => {
       res.status(401).send({
         message: "Unauthorized token"
       })
+    } else {
+      req.userId = decoded.id
+      next()
     }
-
-    req.userId = decoded.id
-    next()
   })
 }
 
