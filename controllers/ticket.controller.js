@@ -2,7 +2,7 @@ const Ticket = require("../models/ticket.model")
 const User = require("../models/user.model")
 const constants = require("../utils/constants")
 
-// TODO: Assign engineer with least assigned ticket
+// Assign engineer with least assigned ticket
 exports.create = async (req, res) => {
   // read the ticket input
   const ticketObj = {
@@ -12,9 +12,12 @@ exports.create = async (req, res) => {
     reporter: req.userId,
   }
 
+  // find approved enginners; sort them by no of tickesAssigned; get first
   const engineer = await User.findOne({
     userType: constants.userTypes.engineer,
     userStatus: constants.userStatuses.approved
+  }).sort({
+    "ticketsAssigned": 1
   })
 
   if (engineer) {
@@ -36,6 +39,9 @@ exports.create = async (req, res) => {
       createdAt: ticketCreated.createdAt,
       updatedAt: ticketCreated.updatedAt
     }
+
+    engineer.ticketsAssigned.push(ticketCreated._id)
+    engineer.save()
     res.status(201).json(ticketResp)
 
   } catch (err) {
