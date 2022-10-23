@@ -52,10 +52,6 @@ exports.create = async (req, res) => {
   }
 }
 
-// updateTicketById should only can be edited by:
-// 1. User who created the ticket
-// 2. Engineer who is assigned
-// 3. Admin
 exports.updateTicketById = async (req, res) => {
   try {
     // ticket id passed in the path param should have been validated in the MW
@@ -71,7 +67,7 @@ exports.updateTicketById = async (req, res) => {
     ticket.assignee = req.body.assignee != undefined ? req.body.assignee : ticket.assignee
 
     // save the fetched ticket in the database
-    const updatedTicket = await ticket.update()
+    const updatedTicket = await ticket.save()
 
     // return the response
     res.status(200).send(updatedTicket)
@@ -110,7 +106,10 @@ exports.getAllTicket = async (req, res) => {
 
 exports.getTicketById = async (req, res) => {
   try {
-    const ticket = await Ticket.find({ _id: req.params.id })
+    const ticket = await Ticket.findOne({ _id: req.params.id })
+    if (!ticket) {
+      return res.status(404).send({ message: "ticket not found" })
+    }
     return res.status(200).send(ticket);
   } catch (err) {
     console.log("Error while fetching ticket", err.message);
