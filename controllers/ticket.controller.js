@@ -84,18 +84,27 @@ exports.updateTicketById = async (req, res) => {
 // 1. Admin: Return all tickets
 // 2. Engineer: Return all tickets assigned to them. 
 // 3. User: Get all tickets created by them.
-// TODO: Need to encode userType in jwt itself to prevent read from db.
 exports.getAllTicket = async (req, res) => {
   try {
-    let queryObj = {}
-    if (req.userType == constants.userTypes.engineer) {
-      queryObj = { $or: [{ reporter: req.userId }, { assignee: req.userId }] }
-    } else {
-      queryObj = { userId: req.userId }
-    }
-    const tickets = await Ticket.find(queryObj)
+    const queryObj = {};
 
-    return res.status(200).send(tickets);
+    if (req.query.status != undefined) {
+      queryObj.status = req.query.status;
+    }
+    const savedUser = await User.findOne({
+      userID: req.userId
+    });
+
+    if (savedUser.userType == constants.userTypes.admin) {
+      //Do nothing
+    } else if (savedUser.userType == constants.userTypes.engineer) {
+      queryObj.assignee = req.userId;
+    } else {
+      queryObj.reporter = req.userId;
+    }
+
+    const tickets = await Ticket.find(queryObj);
+    res.status(200).send(tickets);
   } catch (err) {
     console.log("Error while fetching tickets", err.message);
     res.status(500).json({
