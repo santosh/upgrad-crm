@@ -7,5 +7,5 @@ module.exports = (app) => {
   app.post("/api/v1/tickets", [authJwt.verifyToken, validator.requestBody], controller.create)
   app.put("/api/v1/tickets/:id", [authJwt.verifyToken, validator.onlySpecificUser], controller.updateTicketById)
   app.get("/api/v1/tickets", [authJwt.verifyToken], controller.getAllTicket)
-  app.get("/api/v1/tickets/:id", [authJwt.verifyToken], controller.getTicketById)
+  app.get("/api/v1/tickets/:id", [authJwt.verifyToken, validator.onlySpecificUser], controller.getTicketById)
 }
